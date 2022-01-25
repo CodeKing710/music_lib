@@ -5,6 +5,7 @@ import Gallery from './components/Gallery';
 import SearchBar from './components/SearchBar';
 import ArtistView from './ArtistView';
 import AlbumView from './AlbumView';
+import { createResource as fetchData } from './helper';
 
 import { DataContext } from './context/DataContext';
 import { SearchContext } from './context/SearchContext';
@@ -16,19 +17,26 @@ function App(){
 
     const handleSearch = (e, term) => {
       e.preventDefault();
-      const fetchData = async () => {
-        document.title = `${term} Music`;
-        const response = await fetch(`https://itunes.apple.com/search?term=${term.replace(' ','%20').toLowerCase()}`);
-        const resData = await response.json();
+      // const fetchData = async () => {
+      //   document.title = `${term} Music`;
+      //   const response = await fetch(`https://itunes.apple.com/search?term=${term.replace(' ','%20').toLowerCase()}`);
+      //   const resData = await response.json();
         
-        if(resData.results.length > 0) {
-          setData(resData.results);
-        } else {
-          setMessage('Not Found');
-        }
-      };
-      fetchData();
+      //   if(resData.results.length > 0) {
+      //     setData(resData.results);
+      //   } else {
+      //     setMessage('Not Found');
+      //   }
+      // };
+      // fetchData();
+      setData([fetchData(term)]);
     };
+
+    useEffect(() => {
+      if (searchInput) {
+        setData([fetchData(searchInput)]);
+      }
+    }, [searchInput]);
 
     return (
         <div>
